@@ -25,6 +25,9 @@ window.plugin.oldestportal = function() {};
 
 
 window.plugin.oldestportal.DrawOldestPortal = function() {
+  if(window.mapDataRequest.status.short != 'done'){
+    return;
+  }
   var currenttime = new Date();
   var maxtime = 0;
   var maxportal = '';
