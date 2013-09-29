@@ -25,12 +25,17 @@ window.plugin.oldestportal = function() {};
 
 
 window.plugin.oldestportal.DrawOldestPortal = function() {
-  if(window.mapDataRequest.status.short != 'done' && window.mapDataRequest.status.progress != undefined){
+  if(window.mapDataRequest.status.short != 'done' && window.mapDataRequest.status.progress != undefined ){
     return;
   }
   var currenttime = new Date();
   var maxtime = 0;
   var maxportal = '';
+
+  if(window.PLAYER.guid == null){
+    window.PLAYER.guid  = window._playerNameToGuidCache[window.PLAYER.nickname];
+  }
+  
   $.each(window.portals, function(index, value) {
     if(value.options.ent[2].captured.capturingPlayerId == window.PLAYER.guid && value.options.ent[2].captured.capturedTime < maxtime || maxtime == 0 ){
       maxtime = value.options.ent[2].captured.capturedTime;
@@ -39,12 +44,16 @@ window.plugin.oldestportal.DrawOldestPortal = function() {
   });
   maxportal.setStyle({fillColor: '#FC0FC0', fillOpacity: 100});
   var diff_day = parseInt(Math.abs(maxtime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
-  console.log(maxportal);
-  alert(  '<p>The oldest living portal: <span style="color:red;">'+diff_day+'</span> days  </p>'+
+
+    dialog({
+    html: '<p>The oldest living portal: <span style="color:red;">'+diff_day+'</span> days  </p>'+
           '<center><h2>'+maxportal.options.ent[2].portalV2.descriptiveText.TITLE+'</h2></center> <br />' +
           '<center><img width="40%" alt="'+maxportal.options.ent[2].portalV2.descriptiveText.TITLE+'" src="'+maxportal.options.ent[2].imageByUrl.imageUrl+'"></img></center> <br />'+
-          '<center><p><a href="http://www.ingress.com/intel?ll='+maxportal._latlng.lat+','+maxportal._latlng.lng+'">Link Portal</a></p></center>'
-    );
+          '<center><p><a href="http://www.ingress.com/intel?ll='+maxportal._latlng.lat+','+maxportal._latlng.lng+'">Link Portal</a></p></center>',
+    title: 'Oldest Portal Plugin',
+    id: 'oldestportal'
+  });
+
 
 }
 
