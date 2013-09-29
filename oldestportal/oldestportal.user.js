@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20130929.00000
+// @version        0.0.1.20130929.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -29,7 +29,7 @@ window.plugin.oldestportal.DrawOldestPortal = function() {
     return;
   }
   var currenttime = new Date();
-  var maxtime = 0;
+  var maxtime = 9999999999999999999;
   var maxportal = '';
 
   if(window.PLAYER.guid == null){
@@ -37,11 +37,12 @@ window.plugin.oldestportal.DrawOldestPortal = function() {
   }
   
   $.each(window.portals, function(index, value) {
-    if(value.options.ent[2].captured.capturingPlayerId == window.PLAYER.guid && value.options.ent[2].captured.capturedTime < maxtime || maxtime == 0 ){
+    if(value.options.ent[2].captured.capturingPlayerId == window.PLAYER.guid && value.options.ent[2].captured.capturedTime < maxtime ){
       maxtime = value.options.ent[2].captured.capturedTime;
       maxportal = value;
     }
   });
+  console.log(maxportal);
   maxportal.setStyle({fillColor: '#FC0FC0', fillOpacity: 100});
   var diff_day = parseInt(Math.abs(maxtime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
 
