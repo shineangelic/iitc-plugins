@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20130929.00002
+// @version        0.0.1.20130929.00003
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -24,20 +24,22 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 window.plugin.oldestportal = function() {};
 
 
-window.plugin.oldestportal.DrawOldestPortal = function() {
+window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   if(window.mapDataRequest.status.short != 'done' && window.mapDataRequest.status.progress != undefined ){
+    dialog({
+      html: 'Please wait the loading map',
+      title: 'Oldest Portal Plugin - ATTENTION',
+      id: 'oldestportal'
+    });
     return;
   }
+
   var currenttime = new Date();
   var maxtime = 9999999999999999999;
   var maxportal = '';
 
-  if(window.PLAYER.guid == null){
-    window.PLAYER.guid  = window._playerNameToGuidCache[window.PLAYER.nickname];
-  }
-  
   $.each(window.portals, function(index, value) {
-    if(value.options.ent[2].captured.capturingPlayerId == window.PLAYER.guid && value.options.ent[2].captured.capturedTime < maxtime ){
+    if(window.getPlayerName(value.options.ent[2].captured.capturingPlayerId) == player && value.options.ent[2].captured.capturedTime < maxtime ){
       maxtime = value.options.ent[2].captured.capturedTime;
       maxportal = value;
     }
@@ -47,20 +49,24 @@ window.plugin.oldestportal.DrawOldestPortal = function() {
   var diff_day = parseInt(Math.abs(maxtime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
 
     dialog({
-    html: '<p>The oldest living portal: <span style="color:red;">'+diff_day+'</span> days  </p>'+
+    html: '<p>The oldest living portal player <span style="color:yellow;">'+player+'</span>: <span style="color:red;">'+diff_day+'</span> days </p>'+
           '<center><h2>'+maxportal.options.ent[2].portalV2.descriptiveText.TITLE+'</h2></center> <br />' +
           '<center><img width="40%" alt="'+maxportal.options.ent[2].portalV2.descriptiveText.TITLE+'" src="'+maxportal.options.ent[2].imageByUrl.imageUrl+'"></img></center> <br />'+
           '<center><p><a href="http://www.ingress.com/intel?ll='+maxportal._latlng.lat+','+maxportal._latlng.lng+'">Link Portal</a></p></center>',
     title: 'Oldest Portal Plugin',
     id: 'oldestportal'
   });
-
-
+  
 }
 
 var setup =  function() {
-  //window.addPortalHighlighter('Portal Max Live', window.plugin.maxlive.DrawMaxLive);
-  $('#toolbox').append('<a onclick="window.plugin.oldestportal.DrawOldestPortal()" title="Portal Max Live">Oldest Portal</a>');
+  var content = '<input id="playerOldPortal" placeholder="Type player name to find oldest portal...(Case sensitive)" type="text">';
+  $('#sidebar').append(content);
+  $("#playerOldPortal").keypress(function(e) {
+    if((e.keyCode ? e.keyCode : e.which) !== 13) return;
+    var data = $(this).val();
+    window.plugin.oldestportal.DrawOldestPortalByPlayer(data);
+  });
 }
 
 // PLUGIN END //////////////////////////////////////////////////////////
