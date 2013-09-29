@@ -4,8 +4,8 @@
 // @category       Info
 // @version        0.0.1.20130929.00000
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
-// @updateURL      https://raw.github.com/tailot/iitc-plugins/master/oldestportal.js
-// @downloadURL    https://raw.github.com/tailot/iitc-plugins/master/oldestportal.js
+// @updateURL      https://raw.github.com/tailot/iitc-plugins/master/oldestportal/oldestportal.js
+// @downloadURL    https://raw.github.com/tailot/iitc-plugins/master/oldestportal/oldestportal.js
 // @description    Show the oldest portal
 // @include        https://www.ingress.com/intel*
 // @include        http://www.ingress.com/intel*
