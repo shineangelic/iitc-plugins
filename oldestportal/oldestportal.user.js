@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20131008.00001
+// @version        0.0.1.20131008.00002
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -25,6 +25,7 @@ window.plugin.oldestportal = function() {};
 
 
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
+  var nickToFind = player.toLowerCase();
   if(window.mapDataRequest.status.short != 'done' && window.mapDataRequest.status.progress != undefined ){
     dialog({
       html: 'Please wait the loading map',
@@ -39,7 +40,8 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   var maxportal = '';
 
   $.each(window.portals, function(index, value) {
-    if(window.getPlayerName(value.options.ent[2].captured.capturingPlayerId) == player && value.options.ent[2].captured.capturedTime < maxtime ){
+    var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId)
+    if( get_nickname.toLowerCase() == nickToFind && value.options.ent[2].captured.capturedTime < maxtime ){
       maxtime = value.options.ent[2].captured.capturedTime;
       maxportal = value;
     }
@@ -68,7 +70,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
 }
 
 var setup =  function() {
-  var content = '<input id="playerOldPortal" placeholder="Type player name to find oldest portal...(Case sensitive)" type="text">';
+  var content = '<input id="playerOldPortal" placeholder="Type player name to find oldest portal..." type="text">';
   $('#sidebar').append(content);
   $("#playerOldPortal").keypress(function(e) {
     if((e.keyCode ? e.keyCode : e.which) !== 13) return;
