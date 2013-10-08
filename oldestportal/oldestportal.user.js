@@ -45,6 +45,14 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     }
   });
 
+  if(maxportal == ''){
+    dialog({
+      html: 'you are a noob!!! :(',
+      title: 'Oldest Portal Plugin - ATTENTION',
+      id: 'oldestportal'
+    });    
+  }
+
   maxportal.setStyle({fillColor: '#FC0FC0', fillOpacity: 100});
   var diff_day = parseInt(Math.abs(maxtime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
 
