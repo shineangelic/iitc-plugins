@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20131008.00002
+// @version        0.0.1.20132010.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -25,7 +25,7 @@ window.plugin.oldestportal = function() {};
 
 
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
-  var nickToFind = player.toLowerCase();
+  var nickToFind = $.trim(player.toLowerCase());
   if(window.mapDataRequest.status.short != 'done' && window.mapDataRequest.status.progress != undefined ){
     dialog({
       html: 'Please wait the loading map',
