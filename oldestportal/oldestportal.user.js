@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20132010.00001
+// @version        0.0.1.20132510.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -23,8 +23,19 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 // use own namespace for plugin
 window.plugin.oldestportal = function() {};
 
-
+window.plugin.oldestportal.compare = function(a,b) {
+  if (a.options.ent[2].captured.capturedTime < b.options.ent[2].captured.capturedTime)
+     return -1;
+  if (a.options.ent[2].captured.capturedTime > b.options.ent[2].captured.capturedTime)
+    return 1;
+  return 0;
+}
+window.plugin.oldestportal.timeToDays = function(portalTime){
+  var currenttime = new Date();
+  return parseInt(Math.abs(portalTime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
+}
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
+
   var nickToFind = $.trim(player.toLowerCase());
   if(window.mapDataRequest.status.short != 'done' && window.mapDataRequest.status.progress != undefined ){
     dialog({
@@ -34,20 +45,17 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     });
     return;
   }
-
-  var currenttime = new Date();
-  var maxtime = 9999999999999999999;
-  var maxportal = '';
-
+  $('#portal_highlight_select option:eq(0)').prop('selected', true).change();
+  var myportals = new Array();
   $.each(window.portals, function(index, value) {
     var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId)
-    if( get_nickname.toLowerCase() == nickToFind && value.options.ent[2].captured.capturedTime < maxtime ){
-      maxtime = value.options.ent[2].captured.capturedTime;
-      maxportal = value;
+    if( get_nickname.toLowerCase() == nickToFind ){
+      myportals.push(value);
     }
   });
+  myportals.sort(window.plugin.oldestportal.compare);
 
-  if(maxportal == ''){
+  if(myportals.length == 0){
     dialog({
       html: 'you are a noob!!! :(',
       title: 'Oldest Portal Plugin - ATTENTION',
@@ -55,14 +63,24 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     });    
   }
 
-  maxportal.setStyle({fillColor: '#FC0FC0', fillOpacity: 100});
-  var diff_day = parseInt(Math.abs(maxtime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
+  
+  var diff_day = window.plugin.oldestportal.timeToDays(myportals[0].options.ent[2].captured.capturedTime);
+
+  var other_portals = '<table border="1" width="100%"><tr><td><b>Portal Name</b></td><td><b>Days of life</b></td></tr>';
+  for(var k = 0; k < myportals.length; k++){
+    var color_portal = 'yellow';
+    if(k == 0){
+      color_portal = 'red';
+      myportals[k].setStyle({fillColor: color_portal, fillOpacity: 100});
+    }else{
+      myportals[k].setStyle({fillColor: color_portal, fillOpacity: 100});
+    }
+    other_portals = other_portals + '<tr><td><span ><a style="color:'+color_portal+';" href="http://www.ingress.com/intel?ll='+myportals[k]._latlng.lat+','+myportals[k]._latlng.lng+'">'+myportals[k].options.ent[2].portalV2.descriptiveText.TITLE+'</span></a></td><td>'+window.plugin.oldestportal.timeToDays(myportals[k].options.ent[2].captured.capturedTime);+'</td></tr>';
+  }
+  other_portals = other_portals + '</table>';
 
     dialog({
-    html: '<p>The oldest living portal player <span style="color:yellow;">'+player+'</span>: <span style="color:red;">'+diff_day+'</span> days </p>'+
-          '<center><h2>'+maxportal.options.ent[2].portalV2.descriptiveText.TITLE+'</h2></center> <br />' +
-          '<center><img width="40%" alt="'+maxportal.options.ent[2].portalV2.descriptiveText.TITLE+'" src="'+maxportal.options.ent[2].imageByUrl.imageUrl+'"></img></center> <br />'+
-          '<center><p><a href="http://www.ingress.com/intel?ll='+maxportal._latlng.lat+','+maxportal._latlng.lng+'">Link Portal</a></p></center>',
+    html: other_portals,
     title: 'Oldest Portal Plugin',
     id: 'oldestportal'
   });
