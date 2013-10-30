@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20133010.00001
+// @version        0.0.1.20133110.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -78,7 +78,6 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     other_portals = other_portals + '<tr><td><span ><a style="color:'+color_portal+';" href="http://www.ingress.com/intel?ll='+myportals[k]._latlng.lat+','+myportals[k]._latlng.lng+'">'+myportals[k].options.ent[2].portalV2.descriptiveText.TITLE+'</span></a></td><td>'+window.plugin.oldestportal.timeToDays(myportals[k].options.ent[2].captured.capturedTime);+'</td></tr>';
   }
   other_portals = other_portals + '</table>';
-  $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
     dialog({
     html: other_portals,
     title: 'Oldest Portal Plugin',
@@ -95,6 +94,7 @@ var setup =  function() {
     var data = $(this).val();
     window.plugin.oldestportal.DrawOldestPortalByPlayer(data);
   });
+  $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
 }
 
 // PLUGIN END //////////////////////////////////////////////////////////
