@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20133110.00001
+// @version        0.0.1.20131111.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -48,8 +48,19 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   $('#portal_highlight_select option:eq(0)').prop('selected', true).change();
   var myportals = new Array();
   $.each(window.portals, function(index, value) {
-    var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId)
-    if( get_nickname.toLowerCase() == nickToFind ){
+    var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId);
+    var trap_reso = false;
+    for(var k = 0; k < value.options.details.resonatorArray.resonators.length; k++){
+      if(value.options.details.resonatorArray.resonators[k] == null){
+        continue;
+      }
+      var owner_reso = window.getPlayerName(value.options.details.resonatorArray.resonators[k].ownerGuid);
+      if(owner_reso.toLowerCase() == nickToFind){
+        trap_reso = true;
+        break;
+      }
+    }
+    if( get_nickname.toLowerCase() == nickToFind && trap_reso == true){
       myportals.push(value);
     }
   });
