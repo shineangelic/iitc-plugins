@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20131112.00001
+// @version        0.0.1.20131115.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -35,7 +35,6 @@ window.plugin.oldestportal.timeToDays = function(portalTime){
   return parseInt(Math.abs(portalTime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
 }
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
-
   var nickToFind = $.trim(player.toLowerCase());
   if(window.mapDataRequest.status.short != 'done' && window.mapDataRequest.status.progress != undefined ){
     dialog({
@@ -47,8 +46,8 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   }
   $('#portal_highlight_select option:eq(0)').prop('selected', true).change();
   var myportals = new Array();
+  var myportals_notvalid = new Array();
   $.each(window.portals, function(index, value) {
-    console.log(value.options.ent[2].captured);
     if(value.options.ent[2].captured === undefined){
       return true;
     }
@@ -64,13 +63,18 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
         break;
       }
     }
-    if( get_nickname.toLowerCase() == nickToFind && trap_reso == true){
-      myportals.push(value);
+    if( get_nickname.toLowerCase() == nickToFind ){
+      if(trap_reso == true){
+        myportals.push(value);
+      }else{
+        myportals_notvalid.push(value);
+      }
+      
     }
   });
   myportals.sort(window.plugin.oldestportal.compare);
-
-  if(myportals.length == 0){
+  myportals_notvalid.sort(window.plugin.oldestportal.compare);
+  if(myportals.length == 0 && myportals_notvalid.length == 0){
     dialog({
       html: 'you are a noob!!! :(',
       title: 'Oldest Portal Plugin - ATTENTION',
@@ -93,8 +97,21 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     other_portals = other_portals + '<tr><td><span ><a style="color:'+color_portal+';" href="http://www.ingress.com/intel?ll='+myportals[k]._latlng.lat+','+myportals[k]._latlng.lng+'">'+myportals[k].options.ent[2].portalV2.descriptiveText.TITLE+'</span></a></td><td>'+window.plugin.oldestportal.timeToDays(myportals[k].options.ent[2].captured.capturedTime);+'</td></tr>';
   }
   other_portals = other_portals + '</table>';
+
+  var other_portals_notvalid = '';
+  if(myportals_notvalid.length != 0){
+    other_portals_notvalid = '<p>Portals without resonators:</p><table border="1" width="100%"><tr><td><b>Portal Name</b></td><td><b>Days of life</b></td></tr>';
+    for(var k = 0; k < myportals_notvalid.length; k++){
+      var color_portal = 'violet';
+      myportals_notvalid[k].setStyle({fillColor: color_portal, fillOpacity: 100});
+
+      other_portals_notvalid = other_portals_notvalid + '<tr><td><span ><a style="color:'+color_portal+';" href="http://www.ingress.com/intel?ll='+myportals_notvalid[k]._latlng.lat+','+myportals_notvalid[k]._latlng.lng+'">'+myportals_notvalid[k].options.ent[2].portalV2.descriptiveText.TITLE+'</span></a></td><td>'+window.plugin.oldestportal.timeToDays(myportals_notvalid[k].options.ent[2].captured.capturedTime);+'</td></tr>';
+    }
+    other_portals_notvalid = other_portals_notvalid + '</table>';    
+  }
+
     dialog({
-    html: other_portals,
+    html: other_portals+other_portals_notvalid+"<br /><br /><br />",
     title: 'Oldest Portal Plugin',
     id: 'oldestportal'
   });
