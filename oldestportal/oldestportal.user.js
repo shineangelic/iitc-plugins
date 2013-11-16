@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20131116.00001
+// @version        0.0.1.20131116.00002
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -115,18 +115,18 @@ window.plugin.oldestportal.ScoreBoard = function(faction) {
   $(".ui-dialog-oldestportal").remove();
   var scoreportals = new Array();
   var resovalid = new Array();
-
   $.each(window.portals, function(index, value) {
     if(value.options.details.controllingTeam.team == faction){
       var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId);
       var trap_reso = false;
       scoreportals.push(value);
+
       for(var k = 0; k < value.options.details.resonatorArray.resonators.length; k++){
         if(value.options.details.resonatorArray.resonators[k] == null){
           continue;
         }
         var owner_reso = window.getPlayerName(value.options.details.resonatorArray.resonators[k].ownerGuid);
-        if(owner_reso.toLowerCase() == get_nickname){
+        if(value.options.details.resonatorArray.resonators[k].ownerGuid == value.options.ent[2].captured.capturingPlayerId){
           trap_reso = true;
           break;
         }     
