@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20131116.00002
+// @version        0.0.1.20131117.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -41,11 +41,13 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   $('#portal_highlight_select option:eq(0)').prop('selected', true).change();
   var myportals = new Array();
   var myportals_notvalid = new Array();
+
   $.each(window.portals, function(index, value) {
     if(value.options.ent[2].captured === undefined){
       return true;
     }
     var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId);
+    window.resolvePlayerNames();
     var trap_reso = false;
     for(var k = 0; k < value.options.details.resonatorArray.resonators.length; k++){
       if(value.options.details.resonatorArray.resonators[k] == null){
@@ -57,6 +59,8 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
         break;
       }
     }
+    window.resolvePlayerNames();
+
     if( get_nickname.toLowerCase() == nickToFind ){
       if(trap_reso == true){
         myportals.push(value);
@@ -116,8 +120,18 @@ window.plugin.oldestportal.ScoreBoard = function(faction) {
   var scoreportals = new Array();
   var resovalid = new Array();
   $.each(window.portals, function(index, value) {
+
+    //Artifact
+    var artifact = window.artifact.getArtifactEntities();
+    for(var a = 0; a < artifact.length; a++){11
+      if(artifact[a][0] == value.options.ent[0]){
+        return true;
+      }
+    }
+    //Stop Artifact
     if(value.options.details.controllingTeam.team == faction){
       var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId);
+      window.resolvePlayerNames();
       var trap_reso = false;
       scoreportals.push(value);
 
@@ -135,6 +149,7 @@ window.plugin.oldestportal.ScoreBoard = function(faction) {
     }
   });
 
+  window.resolvePlayerNames();
   scoreportals.sort(window.plugin.oldestportal.compare);
   var other_portals = '<center><input onclick="window.plugin.oldestportal.ScoreBoard(\'RESISTANCE\')" style="color:cyan;cursor:pointer;" type="button" value="RESISTANCE" /><input onclick="window.plugin.oldestportal.ScoreBoard(\'ENLIGHTENED\')" style="color:#00ff00;cursor:pointer;margin-left:15%;" type="button" value="ENLIGHTENED" /></center>'+
   '<h1>Scoreboard faction: '+faction+'</h1><table border="0" width="100%"><tr><td><b>Nickname</b></td><td><b>Portal Name</b></td><td><b>Days of life</b></td><td><b>Valid</b></td></tr>';
