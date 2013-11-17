@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20131117.00001
+// @version        0.0.1.20131117.00002
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -22,6 +22,29 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 // use own namespace for plugin
 window.plugin.oldestportal = function() {};
+window.plugin.oldestportal.timer = 0;
+window.plugin.oldestportal.resolvePlayerNamesTable = function(){
+  var check_player_name = new RegExp("{*}");
+  var wait_resolve = true;
+  var nick = $(".nickname");
+  if($(".ui-dialog-oldestportal").length == 0){
+    return;
+  }
+  for(var k = 0; k < nick.length; k++){
+    var nicktestresolve = window.getPlayerName($(nick[k]).text());
+    if(check_player_name.test(nicktestresolve) || nicktestresolve == 'unknown'){
+      wait_resolve = false;
+      continue;
+    }
+    if($(nick[k]).text() != nicktestresolve){
+      $(nick[k]).text(nicktestresolve);
+    }
+  }
+  if(wait_resolve){
+    return;
+  }
+  window.plugin.oldestportal.timer = setTimeout(window.plugin.oldestportal.resolvePlayerNamesTable, 1000);
+}
 
 window.plugin.oldestportal.compare = function(a,b) {
   if (a.options.ent[2].captured.capturedTime < b.options.ent[2].captured.capturedTime)
@@ -148,16 +171,21 @@ window.plugin.oldestportal.ScoreBoard = function(faction) {
       resovalid[value.options.ent[0]]=trap_reso;  
     }
   });
-
+//$("<b>Paragraph</b>").replaceAll(".test");
   window.resolvePlayerNames();
   scoreportals.sort(window.plugin.oldestportal.compare);
   var other_portals = '<center><input onclick="window.plugin.oldestportal.ScoreBoard(\'RESISTANCE\')" style="color:cyan;cursor:pointer;" type="button" value="RESISTANCE" /><input onclick="window.plugin.oldestportal.ScoreBoard(\'ENLIGHTENED\')" style="color:#00ff00;cursor:pointer;margin-left:15%;" type="button" value="ENLIGHTENED" /></center>'+
   '<h1>Scoreboard faction: '+faction+'</h1><table border="0" width="100%"><tr><td><b>Nickname</b></td><td><b>Portal Name</b></td><td><b>Days of life</b></td><td><b>Valid</b></td></tr>';
   for(var k = 0; k < scoreportals.length; k++){
+    var check_player_name = new RegExp("{*}");
     var color_portal = 'yellow';
     var color_row = new Array(new Array('#015078','#005684'),new Array('#027114','#017f01'));
     var current_color_row='';
     var nickname_portal = window.getPlayerName(scoreportals[k].options.details.captured.capturingPlayerId);
+    window.resolvePlayerNames();
+    if(check_player_name.test(nickname_portal)){
+      nickname_portal = scoreportals[k].options.details.captured.capturingPlayerId;
+    }
     if(k == 0){
       color_portal = 'red';
     }
@@ -166,7 +194,7 @@ window.plugin.oldestportal.ScoreBoard = function(faction) {
     }else{
       current_color_row = color_row[1][k%2];
     }
-    other_portals = other_portals + '<tr style="background:'+current_color_row+';"><td>'+nickname_portal+'</td><td><span ><a style="color:'+color_portal+';" href="http://www.ingress.com/intel?ll='+scoreportals[k]._latlng.lat+','+scoreportals[k]._latlng.lng+'">'+scoreportals[k].options.ent[2].portalV2.descriptiveText.TITLE+'</span></a></td><td>'+window.plugin.oldestportal.timeToDays(scoreportals[k].options.ent[2].captured.capturedTime)+'</td><td>'+resovalid[scoreportals[k].options.ent[0]].toString()+'</td></tr>';
+    other_portals = other_portals + '<tr style="background:'+current_color_row+';"><td class="nickname">'+nickname_portal+'</td><td><span ><a style="color:'+color_portal+';" href="http://www.ingress.com/intel?ll='+scoreportals[k]._latlng.lat+','+scoreportals[k]._latlng.lng+'">'+scoreportals[k].options.ent[2].portalV2.descriptiveText.TITLE+'</span></a></td><td>'+window.plugin.oldestportal.timeToDays(scoreportals[k].options.ent[2].captured.capturedTime)+'</td><td>'+resovalid[scoreportals[k].options.ent[0]].toString()+'</td></tr>';
   }
   other_portals = other_portals + '</table>';
   
@@ -175,7 +203,8 @@ window.plugin.oldestportal.ScoreBoard = function(faction) {
     title: 'Oldest Portal Plugin',
     dialogClass: 'ui-dialog-oldestportal',
     id: 'oldestportal'
-  });  
+  });
+  window.plugin.oldestportal.resolvePlayerNamesTable();
 }
 var setup =  function() {
   $('head').append('<style>' +
