@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20131117.00002
+// @version        0.0.1.20131201.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -69,6 +69,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     if(value.options.ent[2].captured === undefined){
       return true;
     }
+    /*
     var get_nickname = window.getPlayerName(value.options.ent[2].captured.capturingPlayerId);
     window.resolvePlayerNames();
     var trap_reso = false;
@@ -83,7 +84,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
       }
     }
     window.resolvePlayerNames();
-
+    
     if( get_nickname.toLowerCase() == nickToFind ){
       if(trap_reso == true){
         myportals.push(value);
@@ -92,6 +93,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
       }
       
     }
+    */
   });
   myportals.sort(window.plugin.oldestportal.compare);
   myportals_notvalid.sort(window.plugin.oldestportal.compare);
@@ -207,6 +209,8 @@ window.plugin.oldestportal.ScoreBoard = function(faction) {
   window.plugin.oldestportal.resolvePlayerNamesTable();
 }
 var setup =  function() {
+  $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
+  return;
   $('head').append('<style>' +
     '.ui-dialog-oldestportal {width: auto !important; min-width: 500px !important; max-width: 500px !important;}' +
     '.ui-dialog-oldestportal table {border-collapse: collapse;clear: both;empty-cells: show;margin-top: 10px;}' +
@@ -230,9 +234,7 @@ var setup =  function() {
     }else{
       window.plugin.oldestportal.DrawOldestPortalByPlayer(data);
     }
-    
   });
-  $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
 }
 
 // PLUGIN END //////////////////////////////////////////////////////////
