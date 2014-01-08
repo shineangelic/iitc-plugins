@@ -40,7 +40,7 @@ window.plugin.oldestportal.timeToDays = function(portalTime){
 }
 
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
-  var infoplayer = localStorage.getItem(player);
+  var infoplayer = localStorage.getItem(player.toLowerCase());
 
   if(infoplayer == null){
     dialog({
@@ -63,11 +63,14 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
 }
 
 var setup =  function() {
-  //STORE CLICK
+  $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
+
+  //STORE WITH CLICK
   if(window.plugin.oldestportal.html5_storage_support() != false){
      $( document ).ajaxSuccess(function( event, request, settings ) {
       if(request.action == 'getPortalDetails'){
         console.log(request);
+        request.responseJSON.captured.capturingPlayerId = request.responseJSON.captured.capturingPlayerId.toLowerCase();
         var infoplayer = localStorage.getItem(request.responseJSON.captured.capturingPlayerId);
         var ownerportal = localStorage.getItem(request.responseJSON.locationE6.latE6+''+request.responseJSON.locationE6.lngE6);
         if( ownerportal != null){
@@ -89,10 +92,7 @@ var setup =  function() {
         
       }
     });
-  }
-
-
-  $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
+  
   $('head').append('<style>' +
     '.ui-dialog-oldestportal {width: auto !important; min-width: 500px !important; max-width: 500px !important;}' +
     '.ui-dialog-oldestportal table {border-collapse: collapse;clear: both;empty-cells: show;margin-top: 10px;}' +
@@ -115,6 +115,7 @@ var setup =  function() {
     var data = $(this).val();
     window.plugin.oldestportal.DrawOldestPortalByPlayer(data);
   });
+  }
 }
 
 // PLUGIN END //////////////////////////////////////////////////////////
