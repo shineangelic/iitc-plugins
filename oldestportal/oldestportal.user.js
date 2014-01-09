@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20140109.00001
+// @version        0.0.1.20140109.00002
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -33,7 +33,14 @@ window.plugin.oldestportal.html5_storage_support = function() {
     return false;
   }
 }
-
+window.plugin.oldestportal.ResoCheck = function(player,arrayReso){
+  for(var i = 0; i < arrayReso.length; i++){
+    if(arrayReso[i].ownerGuid.toLowerCase() == player){
+      return "true";
+    }
+  }
+  return "false";
+}
 window.plugin.oldestportal.timeToDays = function(portalTime){
   var currenttime = new Date();
   return parseInt(Math.abs(portalTime - currenttime.getTime()) / (24 * 60 * 60 * 1000), 10);
@@ -52,7 +59,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   var infoplayerArray = infoplayer.split("{}");
   var lat = infoplayerArray[2].substr(0, 2) + "." + infoplayerArray[2].substr(2)
   var lon = infoplayerArray[3].substr(0, 2) + "." + infoplayerArray[3].substr(2)
-  var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[0])+' Days<br /><a style="color:red;" href="http://www.ingress.com/intel?ll='+lat+','+lon+'">'+infoplayerArray[4]+'</span></a>';
+  var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[0])+' Days - Valid: '+infoplayerArray[5]+'<br /><a style="color:red;" href="http://www.ingress.com/intel?ll='+lat+','+lon+'">'+infoplayerArray[4]+'</span></a>';
 
   dialog({
     html: other_portals+"<br /><br /><br />",
@@ -69,7 +76,6 @@ var setup =  function() {
   if(window.plugin.oldestportal.html5_storage_support() != false){
      $( document ).ajaxSuccess(function( event, request, settings ) {
       if(request.action == 'getPortalDetails'){
-        console.log(request);
         request.responseJSON.captured.capturingPlayerId = request.responseJSON.captured.capturingPlayerId.toLowerCase();
         var infoplayer = localStorage.getItem(request.responseJSON.captured.capturingPlayerId);
         var ownerportal = localStorage.getItem(request.responseJSON.locationE6.latE6+''+request.responseJSON.locationE6.lngE6);
@@ -79,12 +85,15 @@ var setup =  function() {
           }
         }
         if( infoplayer == null){
-            localStorage.setItem(request.responseJSON.captured.capturingPlayerId,request.responseJSON.captured.capturedTime+'{}'+request.responseJSON.controllingTeam.team+'{}'+request.responseJSON.locationE6.latE6+'{}'+request.responseJSON.locationE6.lngE6+'{}'+request.responseJSON.portalV2.descriptiveText.TITLE);
+            var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId,request.responseJSON.resonatorArray.resonators);
+            localStorage.setItem(request.responseJSON.captured.capturingPlayerId,request.responseJSON.captured.capturedTime+'{}'+request.responseJSON.controllingTeam.team+'{}'+request.responseJSON.locationE6.latE6+'{}'+request.responseJSON.locationE6.lngE6+'{}'+request.responseJSON.portalV2.descriptiveText.TITLE+'{}'+valid);
             localStorage.setItem(request.responseJSON.locationE6.latE6+''+request.responseJSON.locationE6.lngE6,request.responseJSON.captured.capturingPlayerId);
+
         }else{
             var infoplayerArray = infoplayer.split("{}");
             if(request.responseJSON.captured.capturedTime < infoplayerArray[0]){
-              localStorage.setItem(request.responseJSON.captured.capturingPlayerId,request.responseJSON.captured.capturedTime+'{}'+request.responseJSON.controllingTeam.team+'{}'+request.responseJSON.locationE6.latE6+'{}'+request.responseJSON.locationE6.lngE6+'{}'+request.responseJSON.portalV2.descriptiveText.TITLE);
+              var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId,request.responseJSON.resonatorArray.resonators);
+              localStorage.setItem(request.responseJSON.captured.capturingPlayerId,request.responseJSON.captured.capturedTime+'{}'+request.responseJSON.controllingTeam.team+'{}'+request.responseJSON.locationE6.latE6+'{}'+request.responseJSON.locationE6.lngE6+'{}'+request.responseJSON.portalV2.descriptiveText.TITLE+'{}'+valid);
               localStorage.removeItem(infoplayerArray[2]+''+infoplayerArray[3]);
               localStorage.setItem(request.responseJSON.locationE6.latE6+''+request.responseJSON.locationE6.lngE6,request.responseJSON.captured.capturingPlayerId);
             }
