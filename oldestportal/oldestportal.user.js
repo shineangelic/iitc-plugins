@@ -36,10 +36,10 @@ window.plugin.oldestportal.html5_storage_support = function() {
 window.plugin.oldestportal.ResoCheck = function(player,arrayReso){
   for(var i = 0; i < arrayReso.length; i++){
     if(arrayReso[i].ownerGuid.toLowerCase() == player){
-      return "true";
+      return 1;
     }
   }
-  return "false";
+  return 0;
 }
 window.plugin.oldestportal.timeToDays = function(portalTime){
   var currenttime = new Date();
@@ -47,26 +47,26 @@ window.plugin.oldestportal.timeToDays = function(portalTime){
 }
 
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
-  var infoplayer = localStorage.getItem(player.toLowerCase());
+  $.get( "http://tailot.altervista.org/ingress.php?n="+player.toLowerCase(),function(data){
+    if(data == ''){
+      dialog({
+        html: 'you are a noob!!! :(',
+        title: 'Oldest Portal Plugin - ATTENTION',
+        id: 'oldestportal'
+      });    
+    }
+    var infoplayerArray = data.split("{}");
+    //
+    var lat = infoplayerArray[3] * 0.000001;
+    var lon = infoplayerArray[4] * 0.000001;
+    var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+infoplayerArray[6]+'<br /><a style="color:red;" href="http://www.ingress.com/intel?ll='+lat.toFixed(6)+','+lon.toFixed(6)+'">'+infoplayerArray[5]+'</span></a>';
 
-  if(infoplayer == null){
     dialog({
-      html: 'you are a noob!!! :(',
-      title: 'Oldest Portal Plugin - ATTENTION',
+      html: other_portals+"<br /><br /><br />",
+      title: 'Oldest Portal Plugin',
       id: 'oldestportal'
-    });    
-  }
-  var infoplayerArray = infoplayer.split("{}");
-  var lat = infoplayerArray[2].substr(0, 2) + "." + infoplayerArray[2].substr(2)
-  var lon = infoplayerArray[3].substr(0, 2) + "." + infoplayerArray[3].substr(2)
-  var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[0])+' Days - Valid: '+infoplayerArray[5]+'<br /><a style="color:red;" href="http://www.ingress.com/intel?ll='+lat+','+lon+'">'+infoplayerArray[4]+'</span></a>';
-
-  dialog({
-    html: other_portals+"<br /><br /><br />",
-    title: 'Oldest Portal Plugin',
-    id: 'oldestportal'
+    });   
   });
-  
 }
 
 var setup =  function() {
@@ -76,29 +76,10 @@ var setup =  function() {
   if(window.plugin.oldestportal.html5_storage_support() != false){
      $( document ).ajaxSuccess(function( event, request, settings ) {
       if(request.action == 'getPortalDetails'){
-        request.responseJSON.captured.capturingPlayerId = request.responseJSON.captured.capturingPlayerId.toLowerCase();
-        var infoplayer = localStorage.getItem(request.responseJSON.captured.capturingPlayerId);
-        var ownerportal = localStorage.getItem(request.responseJSON.locationE6.latE6+''+request.responseJSON.locationE6.lngE6);
-        if( ownerportal != null){
-          if(ownerportal != request.responseJSON.captured.capturingPlayerId){
-            localStorage.removeItem(ownerportal);
-          }
-        }
-        if( infoplayer == null){
-            var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId,request.responseJSON.resonatorArray.resonators);
-            localStorage.setItem(request.responseJSON.captured.capturingPlayerId,request.responseJSON.captured.capturedTime+'{}'+request.responseJSON.controllingTeam.team+'{}'+request.responseJSON.locationE6.latE6+'{}'+request.responseJSON.locationE6.lngE6+'{}'+request.responseJSON.portalV2.descriptiveText.TITLE+'{}'+valid);
-            localStorage.setItem(request.responseJSON.locationE6.latE6+''+request.responseJSON.locationE6.lngE6,request.responseJSON.captured.capturingPlayerId);
-
-        }else{
-            var infoplayerArray = infoplayer.split("{}");
-            if(request.responseJSON.captured.capturedTime < infoplayerArray[0]){
-              var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId,request.responseJSON.resonatorArray.resonators);
-              localStorage.setItem(request.responseJSON.captured.capturingPlayerId,request.responseJSON.captured.capturedTime+'{}'+request.responseJSON.controllingTeam.team+'{}'+request.responseJSON.locationE6.latE6+'{}'+request.responseJSON.locationE6.lngE6+'{}'+request.responseJSON.portalV2.descriptiveText.TITLE+'{}'+valid);
-              localStorage.removeItem(infoplayerArray[2]+''+infoplayerArray[3]);
-              localStorage.setItem(request.responseJSON.locationE6.latE6+''+request.responseJSON.locationE6.lngE6,request.responseJSON.captured.capturingPlayerId);
-            }
-        }
-        
+        var address = request.responseJSON.portalV2.descriptiveText.ADDRESS;
+        var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId.toLowerCase(),request.responseJSON.resonatorArray.resonators);
+        address = address.split(",");
+         $.post( "http://tailot.altervista.org/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.portalV2.descriptiveText.TITLE, valid: valid, city: address[2], nation: address[3] } );        
       }
     });
   
@@ -126,9 +107,7 @@ var setup =  function() {
   });
   }
 }
-
 // PLUGIN END //////////////////////////////////////////////////////////
-
 
 if(window.iitcLoaded && typeof setup === 'function') {
   setup();
