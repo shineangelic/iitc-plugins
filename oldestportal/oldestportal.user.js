@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20140120.00001
+// @version        0.0.1.20140120.00002
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -53,7 +53,8 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
         html: 'you are a noob!!! :(',
         title: 'Oldest Portal Plugin - ATTENTION',
         id: 'oldestportal'
-      });    
+      });
+      return;   
     }
     var infoplayerArray = data.split("{}");
     //
