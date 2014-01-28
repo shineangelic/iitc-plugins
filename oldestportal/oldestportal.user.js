@@ -71,6 +71,10 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
 }
 
 var setup =  function() {
+  var ishttps = new RegExp(/https:\/\//);
+  if(ishttps.test(document.URL) == true){
+    location.href = document.URL.replace("https","http");
+  }
   $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
 
   //STORE WITH CLICK
