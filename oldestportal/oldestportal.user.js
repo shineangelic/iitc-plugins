@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20140128.00001
+// @version        0.0.1.20140130.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -47,6 +47,15 @@ window.plugin.oldestportal.timeToDays = function(portalTime){
 }
 
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
+    var ishttps = new RegExp(/https:\/\//);
+    if(ishttps.test(document.URL) == true){
+      dialog({
+        html: 'With https not working',
+        title: 'Oldest Portal Plugin - ATTENTION',
+        id: 'oldestportal'
+      });
+      return; 
+    }
   $.get( "http://tailot.altervista.org/ingress.php?n="+player.toLowerCase(),function(data){
     if(data == ''){
       dialog({
@@ -56,6 +65,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
       });
       return;   
     }
+
     var infoplayerArray = data.split("{}");
     //
     var lat = infoplayerArray[3] * 0.000001;
@@ -71,10 +81,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
 }
 
 var setup =  function() {
-  var ishttps = new RegExp(/https:\/\//);
-  if(ishttps.test(document.URL) == true){
-    location.href = document.URL.replace("https","http");
-  }
+
   $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
 
   //STORE WITH CLICK
