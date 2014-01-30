@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20140130.00001
+// @version        0.0.1.20140130.00002
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -50,7 +50,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     var ishttps = new RegExp(/https:\/\//);
     if(ishttps.test(document.URL) == true){
       dialog({
-        html: 'With https not working',
+        html: 'Not working with https ',
         title: 'Oldest Portal Plugin - ATTENTION',
         id: 'oldestportal'
       });
