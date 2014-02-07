@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20140130.00002
+// @version        0.0.1.20140207.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -18,10 +18,16 @@
 //window.portalDetail.request(value.options.ent[0]);
 //var t = window.portalDetail.get(value.options.ent[0]);
 
-function wrapper() {
+function wrapper(plugin_info) {
 // ensure plugin framework is there, even if iitc is not yet loaded
 if(typeof window.plugin !== 'function') window.plugin = function() {};
 
+//PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
+//(leaving them in place might break the 'About IITC' page or break update checks)
+plugin_info.buildName = 'tailot';
+plugin_info.dateTimeVersion = '20140130.00002';
+plugin_info.pluginId = 'oldestportal';
+//END PLUGIN AUTHORS NOTE
 // PLUGIN START ////////////////////////////////////////////////////////
 
 // use own namespace for plugin
@@ -81,17 +87,17 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
 }
 
 var setup =  function() {
-
   $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
 
   //STORE WITH CLICK
   if(window.plugin.oldestportal.html5_storage_support() != false){
      $( document ).ajaxSuccess(function( event, request, settings ) {
       if(request.action == 'getPortalDetails'){
-        var address = request.responseJSON.portalV2.descriptiveText.ADDRESS;
+
+        var address = request.responseJSON.descriptiveText.map.ADDRESS;
         var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId.toLowerCase(),request.responseJSON.resonatorArray.resonators);
         address = address.split(",");
-         $.post( "http://tailot.altervista.org/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.portalV2.descriptiveText.TITLE, valid: valid, city: address[2], nation: address[3] } );        
+         $.post( "http://tailot.altervista.org/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.descriptiveText.map.TITLE, valid: valid, city: address[2], nation: address[3] } );        
       }
     });
   
@@ -121,17 +127,17 @@ var setup =  function() {
 }
 // PLUGIN END //////////////////////////////////////////////////////////
 
-if(window.iitcLoaded && typeof setup === 'function') {
-  setup();
-} else {
-  if(window.bootPlugins)
-    window.bootPlugins.push(setup);
-  else
-    window.bootPlugins = [setup];
-}
+setup.info = plugin_info; //add the script info data to the function as a property
+if(!window.bootPlugins) window.bootPlugins = [];
+window.bootPlugins.push(setup);
+
+// if IITC has already booted, immediately run the 'setup' function
+if(window.iitcLoaded && typeof setup === 'function') setup();
 } // wrapper end
 // inject code into site context
 var script = document.createElement('script');
-script.appendChild(document.createTextNode('('+ wrapper +')();'));
+var info = {};
+if (typeof GM_info !== 'undefined' && GM_info && GM_info.script) info.script = { version: GM_info.script.version, name: GM_info.script.name, description: GM_info.script.description };
+script.appendChild(document.createTextNode('('+ wrapper +')('+JSON.stringify(info)+');'));
 (document.body || document.head || document.documentElement).appendChild(script);
 
