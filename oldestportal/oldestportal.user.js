@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportal
 // @category       Info
-// @version        0.0.1.20140207.00001
+// @version        0.0.1.20140216.00001
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -18,16 +18,10 @@
 //window.portalDetail.request(value.options.ent[0]);
 //var t = window.portalDetail.get(value.options.ent[0]);
 
-function wrapper(plugin_info) {
+function wrapper() {
 // ensure plugin framework is there, even if iitc is not yet loaded
 if(typeof window.plugin !== 'function') window.plugin = function() {};
 
-//PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
-//(leaving them in place might break the 'About IITC' page or break update checks)
-plugin_info.buildName = 'tailot';
-plugin_info.dateTimeVersion = '20140130.00002';
-plugin_info.pluginId = 'oldestportal';
-//END PLUGIN AUTHORS NOTE
 // PLUGIN START ////////////////////////////////////////////////////////
 
 // use own namespace for plugin
@@ -53,15 +47,6 @@ window.plugin.oldestportal.timeToDays = function(portalTime){
 }
 
 window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
-    var ishttps = new RegExp(/https:\/\//);
-    if(ishttps.test(document.URL) == true){
-      dialog({
-        html: 'Not working with https ',
-        title: 'Oldest Portal Plugin - ATTENTION',
-        id: 'oldestportal'
-      });
-      return; 
-    }
   $.get( "http://tailot.altervista.org/ingress.php?n="+player.toLowerCase(),function(data){
     if(data == ''){
       dialog({
@@ -71,7 +56,6 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
       });
       return;   
     }
-
     var infoplayerArray = data.split("{}");
     //
     var lat = infoplayerArray[3] * 0.000001;
@@ -87,17 +71,18 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
 }
 
 var setup =  function() {
+  alert("Reietti Style!!! Bologna 16/02/2014 - WAR WAR WAR <br/> <center><img src=\"https://24.media.tumblr.com/e40124a41bba03a0646b935484994304/tumblr_mhr69ivVvG1s4bs2eo1_250.gif\" /></center>");
+  return;
   $.get( "http://9w9.org/services/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
 
   //STORE WITH CLICK
   if(window.plugin.oldestportal.html5_storage_support() != false){
      $( document ).ajaxSuccess(function( event, request, settings ) {
       if(request.action == 'getPortalDetails'){
-
-        var address = request.responseJSON.descriptiveText.map.ADDRESS;
+        var address = request.responseJSON.portalV2.descriptiveText.ADDRESS;
         var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId.toLowerCase(),request.responseJSON.resonatorArray.resonators);
         address = address.split(",");
-         $.post( "http://tailot.altervista.org/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.descriptiveText.map.TITLE, valid: valid, city: address[2], nation: address[3] } );        
+         $.post( "http://tailot.altervista.org/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.portalV2.descriptiveText.TITLE, valid: valid, city: address[2], nation: address[3] } );        
       }
     });
   
@@ -127,17 +112,17 @@ var setup =  function() {
 }
 // PLUGIN END //////////////////////////////////////////////////////////
 
-setup.info = plugin_info; //add the script info data to the function as a property
-if(!window.bootPlugins) window.bootPlugins = [];
-window.bootPlugins.push(setup);
-
-// if IITC has already booted, immediately run the 'setup' function
-if(window.iitcLoaded && typeof setup === 'function') setup();
+if(window.iitcLoaded && typeof setup === 'function') {
+  setup();
+} else {
+  if(window.bootPlugins)
+    window.bootPlugins.push(setup);
+  else
+    window.bootPlugins = [setup];
+}
 } // wrapper end
 // inject code into site context
 var script = document.createElement('script');
-var info = {};
-if (typeof GM_info !== 'undefined' && GM_info && GM_info.script) info.script = { version: GM_info.script.version, name: GM_info.script.name, description: GM_info.script.description };
-script.appendChild(document.createTextNode('('+ wrapper +')('+JSON.stringify(info)+');'));
+script.appendChild(document.createTextNode('('+ wrapper +')();'));
 (document.body || document.head || document.documentElement).appendChild(script);
 
