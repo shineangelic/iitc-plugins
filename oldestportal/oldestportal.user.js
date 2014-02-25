@@ -64,7 +64,10 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     //
     var lat = infoplayerArray[3] * 0.000001;
     var lon = infoplayerArray[4] * 0.000001;
-    var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+infoplayerArray[6]+'<br /><a style="color:red;" href="http://www.ingress.com/intel?ll='+lat.toFixed(6)+','+lon.toFixed(6)+'">'+infoplayerArray[5]+'</span></a>';
+    var isValid = "NO" ;
+    if (infoplayerArray[6])
+      	 isValid = "YES" ;
+    var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+'<br /><br />Oldest Portal known for '+infoplayerArray[0]+' is<a style="color:red;" href="http://www.ingress.com/intel?ll='+lat.toFixed(6)+','+lon.toFixed(6)+'">'+infoplayerArray[5]+'</span></a>';
 
     dialog({
       html: other_portals+"<br /><br /><br />",
