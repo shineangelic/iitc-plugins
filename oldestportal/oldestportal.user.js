@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal
 // @category Info
-// @version 0.0.2.20140225.00002
+// @version 0.0.2.20140225.00003
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -57,9 +57,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
         id: 'oldestportal'
       });
       return;
-    }//else{
-       //  alert("Reietto Tool Bologna 21/02/2014 - WAR WAR WAR <br/>Based on Tailot 9w9.org work "+data);
-    //}
+    }
     var infoplayerArray = data.split("{}");
     //
     var lat = infoplayerArray[3] * 0.000001;
@@ -67,7 +65,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     var isValid = "NO" ;
     if (infoplayerArray[6])
       	 isValid = "YES" ;
-    var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+'<br /><br />Oldest Portal known for '+infoplayerArray[0]+' is<a style="color:red;" href="http://www.ingress.com/intel?ll='+lat.toFixed(6)+','+lon.toFixed(6)+'">'+infoplayerArray[5]+'</span></a>';
+    var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+'<br /><br />Oldest Portal known for '+infoplayerArray[0]+' is <a href="http://www.ingress.com/intel?ll='+lat.toFixed(6)+','+lon.toFixed(6)+'">'+infoplayerArray[5]+'</span></a>';
 
     dialog({
       html: other_portals+"<br /><br /><br />",
@@ -81,7 +79,7 @@ var setup = function() {
   // alert("Reietti Style!!! Bologna 16/02/2014 - WAR WAR WAR <br/> <center><img src=\"https://24.media.tumblr.com/e40124a41bba03a0646b935484994304/tumblr_mhr69ivVvG1s4bs2eo1_250.gif\" /></center>");
   //return;
 
-  $.get( "http://www.angelic.it/ingress/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
+  $.get( "http://www.angelic.it/ingress/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team+"&ap="+window.PLAYER.ap+"&lev="+window.PLAYER.level );
 
   //STORE WITH CLICK
   if(window.plugin.oldestportal.html5_storage_support() != false){
