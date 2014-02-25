@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal
 // @category Info
-// @version 0.0.2.20140225.00001
+// @version 0.0.2.20140225.00002
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL https://github.com/shineangelic/iitc-plugins/edit/master/oldestportal/oldestportal.user.js
 // @downloadURL https://github.com/shineangelic/iitc-plugins/edit/master/oldestportal/oldestportal.user.js
