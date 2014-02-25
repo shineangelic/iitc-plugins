@@ -2,16 +2,17 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal
 // @category Info
-// @version 0.0.1.20140216.00001
+// @version 0.0.2.20140225.00001
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
-// @updateURL https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
-// @downloadURL https://github.com/tailot/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
-// @description Show the oldest portal
+// @updateURL https://github.com/shineangelic/iitc-plugins/edit/master/oldestportal/oldestportal.user.js
+// @downloadURL https://github.com/shineangelic/iitc-plugins/edit/master/oldestportal/oldestportal.user.js
+// @description Show the oldest portal of a chosen player
 // @include https://www.ingress.com/intel*
 // @include http://www.ingress.com/intel*
 // @match https://www.ingress.com/intel*
 // @match http://www.ingress.com/intel*
 // @grant none
+// @author tailot@9w9.org shine@angelic.it
 // ==/UserScript==
 
 //TODO :)
@@ -51,7 +52,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   $.get( "http://www.angelic.it/ingress/ingress.php?n="+player.toLowerCase(),function(data){
     if(data == ''){
       dialog({
-        html: 'you are a noob!!! :(',
+        html: 'no player found with this nickname. Is this espionage?',
         title: 'Oldest Portal Plugin - ATTENTION',
         id: 'oldestportal'
       });
@@ -74,7 +75,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
 }
 
 var setup = function() {
- // alert("Reietti Style!!! Bologna 16/02/2014 - WAR WAR WAR <br/> <center><img src=\"https://24.media.tumblr.com/e40124a41bba03a0646b935484994304/tumblr_mhr69ivVvG1s4bs2eo1_250.gif\" /></center>");
+  // alert("Reietti Style!!! Bologna 16/02/2014 - WAR WAR WAR <br/> <center><img src=\"https://24.media.tumblr.com/e40124a41bba03a0646b935484994304/tumblr_mhr69ivVvG1s4bs2eo1_250.gif\" /></center>");
   //return;
 
   $.get( "http://www.angelic.it/ingress/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team );
