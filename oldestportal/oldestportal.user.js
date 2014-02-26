@@ -52,8 +52,8 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
   $.get( "http://www.angelic.it/ingress/ingress.php?n="+player.toLowerCase(),function(data){
     if(data == ''){
       dialog({
-        html: 'no player found with this nickname. Is this espionage?',
-        title: 'Oldest Portal Plugin - ATTENTION',
+        html: 'No player found with nickname:'+player+'. Is this espionage?',
+        title: 'Oldest Portal Plugin - NOT FOUND',
         id: 'oldestportal'
       });
       return;
@@ -65,10 +65,18 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     var isValid = "NO" ;
     if (infoplayerArray[6])
       	 isValid = "YES" ;
-    var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+'<br /><br />Oldest Portal known for '+infoplayerArray[0]+' is <a href="http://www.ingress.com/intel?ll='+lat.toFixed(6)+','+lon.toFixed(6)+'">'+infoplayerArray[5]+'</span></a>';
-
+    var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+
+                        '<br /><br />Oldest Portal known for '+
+                        infoplayerArray[0]+' is <a href="http://www.ingress.com/intel?ll='
+                        +lat.toFixed(6)+','
+                        +lon.toFixed(6)+'">'
+                        +infoplayerArray[5]+', '+infoplayerArray[6]+'</span></a>';
+    var recon = infoplayerArray[10];
+    if (recon == '0000-00-00' || recon )
+      recon = 'unknown';
+    var queue = 'Last reconnaissance:'+recon+;
     dialog({
-      html: other_portals+"<br /><br /><br />",
+      html: other_portals+"<br /><br /><br />"+queue,
       title: 'Oldest Portal Plugin',
       id: 'oldestportal'
     });
@@ -88,11 +96,9 @@ var setup = function() {
       if(request.action == 'getPortalDetails'){
           
         var address = request.responseJSON.descriptiveText.map.ADDRESS;
-          
         var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId.toLowerCase(),request.responseJSON.resonatorArray.resonators);
         address = address.split(",");
-         // alert("e.valid: "+ valid);
-         $.post( "http://www.angelic.it/ingress/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.descriptiveText.map.TITLE, valid: valid, city: address[2], nation: address[3] } );
+        $.post( "http://www.angelic.it/ingress/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.descriptiveText.map.TITLE, valid: valid, city: address[2], nation: address[3] } );
    
       }
     });
