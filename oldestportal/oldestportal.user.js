@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal
 // @category Info
-// @version 0.0.2.20140226.00008
+// @version 0.0.2.20140226.00009
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -54,7 +54,7 @@ function wrapper() {
   
   window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     
-    $.post( "http://www.angelic.it/ingress/ingress.php?n="+player.toLowerCase(),function(data){
+      $.post( "http://www.angelic.it/ingress/ingress.php", {n:player.toLowerCase()},function(data){
       if(data == ''){
         dialog({
           html: 'No player found with nickname:'+player+'. Is this espionage?',
@@ -98,7 +98,8 @@ function wrapper() {
   
   var setup = function() {
   
-    $.post( "http://www.angelic.it/ingress/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team+"&ap="+window.PLAYER.ap+"&lev="+window.PLAYER.level );
+    //$.get( "http://www.angelic.it/ingress/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team+"&ap="+window.PLAYER.ap+"&lev="+window.PLAYER.level );
+      $.post( "http://www.angelic.it/ingress/ingress.php", { u: window.PLAYER.nickname , f:window.PLAYER.team, ap:window.PLAYER.ap, lev:window.PLAYER.level });       
   
    /* $.ajax({
         url: "http://www.angelic.it/ingress/ingress.php?u="+window.PLAYER.nickname+"&f="+window.PLAYER.team+"&ap="+window.PLAYER.ap+"&lev="+window.PLAYER.level ,
