@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal
 // @category Info
-// @version 0.0.2.20140226.00004
+// @version 0.0.2.20140226.00005
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -65,12 +65,17 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     var isValid = "NO" ;
     if (infoplayerArray[6])
       	 isValid = "YES" ;
+    var color = '#03DC03';
+    if (infoplayerArray[2] == 'RESISTANCE')
+        color = '#0088ff';
     var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+
                         '<br /><br />Oldest Portal pwned by '+
-                        infoplayerArray[0]+' is <a href="http://www.ingress.com/intel?ll='
+                        '<mark class="nickname" style="color:'+color+'">'+
+                        infoplayerArray[0]+
+                        +'</mark> is <a href="http://www.ingress.com/intel?ll='
                         +lat.toFixed(6)+','
                         +lon.toFixed(6)+'">'
-                        +infoplayerArray[5]+', '+infoplayerArray[7]+'</span></a>';
+                        +infoplayerArray[5]+', '+'</span></a>';
     var recon = infoplayerArray[10];
     if (!recon || 0 === recon.length || recon == '0000-00-00')
       recon = 'unknown';
