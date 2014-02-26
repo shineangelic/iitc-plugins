@@ -71,7 +71,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+
                         '<br /><br />Oldest Portal pwned by '+
                         '<mark class="nickname" style="color:'+color+'">'+
-                        infoplayerArray[0]+
+                        infoplayerArray[0]
                         +'</mark> is <a href="http://www.ingress.com/intel?ll='
                         +lat.toFixed(6)+','
                         +lon.toFixed(6)+'">'
