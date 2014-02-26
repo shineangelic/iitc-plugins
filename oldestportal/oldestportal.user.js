@@ -72,9 +72,12 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
                         +lon.toFixed(6)+'">'
                         +infoplayerArray[5]+', '+infoplayerArray[6]+'</span></a>';
     var recon = infoplayerArray[10];
-    if (recon == '0000-00-00' || recon )
+    if (!recon || 0 === recon.length || recon == '0000-00-00')
       recon = 'unknown';
-    var queue = '<i>Last reconnaissance:'+recon+'</i>';
+    var queue = '<i>Last reconnaissance: '+recon+'</i>';
+    var discover = infoplayerArray[9];    
+    if (discover && recon != '0000-00-00')
+        queue += '<br/><i>Agent discovery: '+recon+'</i>';
     dialog({
       html: other_portals+"<br /><br /><br />"+queue,
       title: 'Oldest Portal Plugin',
