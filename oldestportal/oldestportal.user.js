@@ -66,18 +66,18 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     if (infoplayerArray[6])
       	 isValid = "YES" ;
     var other_portals = 'Life: '+window.plugin.oldestportal.timeToDays(infoplayerArray[1])+' Days - Valid: '+isValid+
-                        '<br /><br />Oldest Portal known for '+
+                        '<br /><br />Oldest Portal pwned by '+
                         infoplayerArray[0]+' is <a href="http://www.ingress.com/intel?ll='
                         +lat.toFixed(6)+','
                         +lon.toFixed(6)+'">'
-                        +infoplayerArray[5]+', '+infoplayerArray[6]+'</span></a>';
+                        +infoplayerArray[5]+', '+infoplayerArray[7]+'</span></a>';
     var recon = infoplayerArray[10];
     if (!recon || 0 === recon.length || recon == '0000-00-00')
       recon = 'unknown';
     var queue = '<i>Last reconnaissance: '+recon+'</i>';
     var discover = infoplayerArray[9];    
-    if (discover && recon != '0000-00-00')
-        queue += '<br/><i>Agent discovery: '+recon+'</i>';
+    if (discover && discover != '0000-00-00')
+        queue += '<br/><i>Agent discovery: '+discover+'</i>';
     dialog({
       html: other_portals+"<br /><br /><br />"+queue,
       title: 'Oldest Portal Plugin',
