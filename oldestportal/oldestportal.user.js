@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal
 // @category Info
-// @version 0.0.2.20140225.00003
+// @version 0.0.2.20140226.00004
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -74,7 +74,7 @@ window.plugin.oldestportal.DrawOldestPortalByPlayer = function(player) {
     var recon = infoplayerArray[10];
     if (recon == '0000-00-00' || recon )
       recon = 'unknown';
-    var queue = 'Last reconnaissance:'+recon+;
+    var queue = '<i>Last reconnaissance:'+recon+'</i>';
     dialog({
       html: other_portals+"<br /><br /><br />"+queue,
       title: 'Oldest Portal Plugin',
