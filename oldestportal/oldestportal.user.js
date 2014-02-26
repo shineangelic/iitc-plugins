@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal
 // @category Info
-// @version 0.0.2.20140226.00005
+// @version 0.0.2.20140226.00007
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -35,12 +35,17 @@ function wrapper() {
     }
   }
   window.plugin.oldestportal.ResoCheck = function(player,arrayReso){
-    for(var i = 0; i < arrayReso.length; i++){
-      if(arrayReso[i].ownerGuid.toLowerCase() == player){
-        return 1;
+    try{
+      for(var i = 0; i < arrayReso.length; i++){
+          if(arrayReso[i].ownerGuid.toLowerCase() == player){
+            return 1;
+          }
       }
-    }
-    return 0;
+      return 0;
+      }catch (e) {
+   		// statements to handle any exceptions
+        return 0;
+	}
   }
   window.plugin.oldestportal.timeToDays = function(portalTime){
     var currenttime = new Date();
@@ -100,11 +105,21 @@ function wrapper() {
        $( document ).ajaxSuccess(function( event, request, settings ) {
          
         if(request.action == 'getPortalDetails'){
+          var capturing;
+          var ctime;
+            if (!request.responseJSON.captured){
+                capturing = '';
+                ctime = 0;
+            }else{
+                capturing = request.responseJSON.captured.capturingPlayerId;
+                ctime = request.responseJSON.captured.capturedTime;
+            }
             
           var address = request.responseJSON.descriptiveText.map.ADDRESS;
-          var valid = window.plugin.oldestportal.ResoCheck(request.responseJSON.captured.capturingPlayerId.toLowerCase(),request.responseJSON.resonatorArray.resonators);
+          var valid = window.plugin.oldestportal.ResoCheck(capturing.toLowerCase(),request.responseJSON.resonatorArray.resonators);
           address = address.split(",");
-          $.post( "http://www.angelic.it/ingress/ingress.php", { nickname: request.responseJSON.captured.capturingPlayerId, capturetime: request.responseJSON.captured.capturedTime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.descriptiveText.map.TITLE, valid: valid, city: address[2], nation: address[3] } );
+          
+          $.post( "http://www.angelic.it/ingress/ingress.php", { nickname: capturing , capturetime: ctime, faction: request.responseJSON.controllingTeam.team, lat: request.responseJSON.locationE6.latE6, lon: request.responseJSON.locationE6.lngE6, title: request.responseJSON.descriptiveText.map.TITLE, valid: valid, city: address[2], nation: address[3] } );
      
         }
       });
