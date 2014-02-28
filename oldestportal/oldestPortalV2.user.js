@@ -37,15 +37,13 @@ function wrapper() {
     };
     window.plugin.oldestportal.showInfo = function() {
                 dialog({
-                    html: "Oldest portal plugin stores portal information upon all script users clicking on portal details. "
+                    html: "Oldest portal plugin stores portal information when script users click on portal details. "
                     +"It DOES NOT collect personal data, nor increase network traffic toward intel map."
                     +"<br/><br/>Once a new Guardian is found, it will be visible to ALL your faction members but not to the other faction, so clicking on your guardian is fine."
-                    +" More faction clicks, more correct enemy guardian found."
-                    +"<br/><br/><b>Agent discovery</b> indicates first agent spotting, ie after guardian change/removal"
-                    +"<br/><br/><b>Oldest portal Discovery</b> is the date of discovery of the guardian"
-                    +"<br/><br/><b>Last Reconnaissance</b> indicates last visit/confirmation to the oldest portal"
+                    +"More the faction clicks, more the correct enemy guardian identified."
+                    +"<br/><br/><b>Last Recon</b> indicates last visit/confirmation to the portal"
                     +"<br/><br/> <b>Oldest portal plugin</b> is a free espionage tool, but it's likely to be considered against the Ingress TOS. Any use is at your own risk. Please use it wisely and share it only with <i>trusted</i> agents.",
-                    title: "Oldest Portal Plugin - tailot@9w9.org & shine@angelic.it",
+                    title: "Oldest Portal Plugin V2 - tailot@9w9.org & shine@angelic.it",
                     id: "oldestportalinfo"
                 });
                 return;
@@ -62,7 +60,7 @@ function wrapper() {
             if (t == "") {
                 dialog({
                     html: "No player found with nickname: " + e + ". Is this espionage?",
-                    title: "Oldest Portal Plugin - NOT FOUND",
+                    title: "Oldest Portal Plugin V2 - NOT FOUND",
                     id: "oldestportal"
                 });
                 return
@@ -73,14 +71,30 @@ function wrapper() {
           
             var a = n[10];
             
-            var first='style="background-color: #E40000 !important;"';
-            
+            var first='style="background-color: #E40000 !important;font-weight:bold;"';
+            var daterFirst = window.plugin.oldestportal.timeToDays(n[1]);
+            //alert(daterFirst);
+            var image = '<td rowspan="5"></td>';
+            if (daterFirst > 2 && daterFirst < 10)
+            	image = '<td rowspan="5"><img src="http://www.angelic.it/ingressv2/guardian1.png" alt="guardian"></td> ';
+            else if (daterFirst < 20)
+            	image = '<td rowspan="5"><img src="http://www.angelic.it/ingressv2/guardian2.png" alt="guardian"></td> ';
+            else if (daterFirst < 90)
+            	image = '<td rowspan="5"><img src="http://www.angelic.it/ingressv2/guardian3.png" alt="guardian"></td> ';
+            else if (daterFirst < 150)
+            	image = '<td rowspan="5"><img src="http://www.angelic.it/ingressv2/guardian4.png" alt="guardian"></td> ';
+            else if (daterFirst >= 150)
+            	image = '<td rowspan="5"><img src="http://www.angelic.it/ingressv2/guardian5.png" alt="guardian"> </td>';
+                
+            if (daterFirst >= 10000)
+            	image = '<td rowspan="5"></td>';//fix null date
             var o = "#03DC03";
+            
             if (n[2] == "R") o = "#0088ff";
-            var u = "Oldest Portals pwned by " + '<mark class="nickname" style="color:' + o + '">' + n[0] +"</mark>: "+numrows+"<br/><br/> ";
-            u+="<table><tbody><th>Portal</th><th>Life</th><th>Valid</th><th>Last recon</th>";
+            var u = "Known Portals pwned by " + '<mark class="nickname" style="color:' + o + '">' + n[0] +"</mark>: "+numrows+"<br/><br/> ";
+            u+="<table><tbody><th></th><th>Portal</th><th>Life</th><th>Valid</th><th>Last recon</th>";
             for (var tc = 0; tc < numrows; tc++) {
-               if (tc > 5){
+               if (tc > 4){
                     break;
                }
                 var r = n[(tc*11)+3] * 1e-6;
@@ -89,14 +103,15 @@ function wrapper() {
                 if (n[(tc*11)+6]) s = "YES";
                 var dater = window.plugin.oldestportal.timeToDays(n[(tc*11)+1])+' days';
                 if (n[(tc*11)+1]=="" || n[(tc*11)+1]==0)
-                    dater = 'unknown';
+                    dater = 'unknown';                           
                 
-                u+='<tr><td '+first+'> <a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(tc*11)+5] + "</span></a>"+
+                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(tc*11)+5] + "</span></a>"+
                     '</td><td '+first+'>' + dater + ' </td>'+
                     '<td '+first+'>'+s+'</td>'+
                     '<td '+first+'>'+n[(tc*11)+10]+'</td></tr>';
                     
                 first="";
+                image="";
                 
             }
                u+="</tbody></table>";
@@ -110,10 +125,10 @@ function wrapper() {
             if (lr && lr != "0000-00-00 00:00:00")
                 f += "<br/><i>Last Reconnaissance: " + lr + "</i>";*/
            
-            var f = '<br/><br/><div class="linkdetails" ><aside><a href="#" onclick="window.plugin.oldestportal.showInfo()" title="Oldest Portal Info">How does it Work?</a></aside></div>';
+            var f = '<br/><div class="linkdetails" ><aside><a href="#" onclick="window.plugin.oldestportal.showInfo()" title="Oldest Portal Info">How does it Work?</a></aside></div>';
             dialog({
-                html: u + "<br /><br /><br />" + f,
-                title: "Oldest Portal Plugin",
+                html: u + "<br /><br />" + f,
+                title: "Oldest Portal Plugin V2",
                	width: 'auto',
                 id: "oldestportal"
             })
