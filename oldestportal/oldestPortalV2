@@ -68,22 +68,22 @@ function wrapper() {
                 return
             }
             var n = t.split("{}");
-            var arrayLength = n.length;
-            var numrows = arrayLength/10;
-           
-           
+            var arrayLength = n.length-1;
+            var numrows = arrayLength/11;
+          
             var a = n[10];
             var s = "NO";
             if (n[6]) s = "YES";
             var o = "#03DC03";
             if (n[2] == "RESISTANCE") o = "#0088ff";
-            var u = "Life: " + window.plugin.oldestportal.timeToDays(n[1]) + " Days - Valid: " + s + "<br /><br />"+
-                "Oldest Portal pwned by " + '<mark class="nickname" style="color:' + o + '">' + n[0] +
-                "</mark> ";
-            for (var i = 0; i < numrows; i++) {
-                var r = n[(i*10)+3] * 1e-6;
-                var i = n[(i*10)+4] * 1e-6;
-                u+=' <a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(i*10)+5] + "</span></a>";
+            var u = "Oldest Portals pwned by " + '<mark class="nickname" style="color:' + o + '">' + n[0] +"</mark>: "+numrows+"<br/><br/> ";
+            for (var tc = 0; tc < numrows; tc++) {
+               
+                var r = n[(tc*11)+3] * 1e-6;
+                var i = n[(tc*11)+4] * 1e-6;
+                
+                u+=' <a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(tc*11)+5] + "</span></a>"+
+                    " - Life: " + window.plugin.oldestportal.timeToDays(n[(tc*11)+1]) + " Days <br/>";
             }
                
            
