@@ -72,20 +72,33 @@ function wrapper() {
             var numrows = arrayLength/11;
           
             var a = n[10];
-            var s = "NO";
-            if (n[6]) s = "YES";
+            
+            var first='style="background-color: #E40000 !important;"';
+            
             var o = "#03DC03";
-            if (n[2] == "RESISTANCE") o = "#0088ff";
+            if (n[2] == "R") o = "#0088ff";
             var u = "Oldest Portals pwned by " + '<mark class="nickname" style="color:' + o + '">' + n[0] +"</mark>: "+numrows+"<br/><br/> ";
+            u+="<table><tbody><th>Portal</th><th>Life</th><th>Valid</th><th>Last recon</th>";
             for (var tc = 0; tc < numrows; tc++) {
                
                 var r = n[(tc*11)+3] * 1e-6;
                 var i = n[(tc*11)+4] * 1e-6;
+                var s = "NO";
+                if (n[(tc*11)+6]) s = "YES";
+                var dater = window.plugin.oldestportal.timeToDays(n[(tc*11)+1])+' days';
+                if (n[(tc*11)+1]=="" || n[(tc*11)+1]==0)
+                    dater = 'unknown';
                 
-                u+=' <a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(tc*11)+5] + "</span></a>"+
-                    " - Life: " + window.plugin.oldestportal.timeToDays(n[(tc*11)+1]) + " Days <br/>";
+                u+='<tr><td '+first+'> <a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(tc*11)+5] + "</span></a>"+
+                    '</td><td '+first+'>' + dater + ' </td>'+
+                    '<td '+first+'>'+s+'</td>'+
+                    '<td '+first+'>'+n[(tc*11)+10]+'</td></tr>';
+                    
+                first="";
+                if (tc > 5)
+                    break;
             }
-               
+               u+="</tbody></table>";
            
           /*  if (!a || 0 === a.length || a == "0000-00-00 00:00:00") a = "unknown";
             var f = "<i>Oldest portal Discovery: " + a + "</i>";
@@ -100,6 +113,8 @@ function wrapper() {
             dialog({
                 html: u + "<br /><br /><br />" + f,
                 title: "Oldest Portal Plugin",
+               	width: 500 ,
+                position: ['center',150],
                 id: "oldestportal"
             })
         })
