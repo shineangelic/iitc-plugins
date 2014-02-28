@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal2
 // @category Info
-// @version 0.0.3.20140227.00011
+// @version 0.0.3.20140228.00012
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 
 // @description Show the oldest portal of a chosen player
@@ -80,7 +80,9 @@ function wrapper() {
             var u = "Oldest Portals pwned by " + '<mark class="nickname" style="color:' + o + '">' + n[0] +"</mark>: "+numrows+"<br/><br/> ";
             u+="<table><tbody><th>Portal</th><th>Life</th><th>Valid</th><th>Last recon</th>";
             for (var tc = 0; tc < numrows; tc++) {
-               
+               if (tc > 5){
+                    break;
+               }
                 var r = n[(tc*11)+3] * 1e-6;
                 var i = n[(tc*11)+4] * 1e-6;
                 var s = "NO";
@@ -95,8 +97,7 @@ function wrapper() {
                     '<td '+first+'>'+n[(tc*11)+10]+'</td></tr>';
                     
                 first="";
-                if (tc > 5)
-                    break;
+                
             }
                u+="</tbody></table>";
            
@@ -113,8 +114,7 @@ function wrapper() {
             dialog({
                 html: u + "<br /><br /><br />" + f,
                 title: "Oldest Portal Plugin",
-               	width: 500 ,
-                position: ['center',150],
+               	width: 'auto',
                 id: "oldestportal"
             })
         })
