@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportal2
 // @category Info
-// @version 0.0.3.20140228.00012
+// @version 0.0.3.20140301.00013
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 
 // @description Show the oldest portal of a chosen player
@@ -92,7 +92,7 @@ function wrapper() {
             
             if (n[2] == "R") o = "#0088ff";
             var u = "Known Portals pwned by " + '<mark class="nickname" style="color:' + o + '">' + n[0] +"</mark>: "+numrows+"<br/><br/> ";
-            u+="<table><tbody><th></th><th>Portal</th><th>Life</th><th>Valid</th><th>Last recon</th>";
+            u+="<table><tbody><th></th><th>Portal</th><th>Life</th><th>Valid</th><th>Reporter</th><th>Last recon</th>";
             for (var tc = 0; tc < numrows; tc++) {
                if (tc > 4){
                     break;
@@ -108,6 +108,7 @@ function wrapper() {
                 u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(tc*11)+5] + "</span></a>"+
                     '</td><td '+first+'>' + dater + ' </td>'+
                     '<td '+first+'>'+s+'</td>'+
+                    '<td '+first+'>'+n[(tc*11)+8]+'</td>'+
                     '<td '+first+'>'+n[(tc*11)+10]+'</td></tr>';
                     
                 first="";
@@ -156,7 +157,7 @@ function wrapper() {
                     }
                     var s = t.responseJSON.descriptiveText.map.ADDRESS;
                     var o = window.plugin.oldestportal.ResoCheck(r.toLowerCase(), t.responseJSON.resonatorArray.resonators);
-                    s = s.split(",");
+                    //s = s.split(",");
                    
                  /*    $.ajax({
                         type: 'POST',
@@ -177,8 +178,7 @@ function wrapper() {
                         lon: t.responseJSON.locationE6.lngE6,
                         title: t.responseJSON.descriptiveText.map.TITLE,
                         valid: o,
-                        city: s[2],
-                        nation: s[3],
+                        address: s,
                         nickReporter: window.PLAYER.nickname
                     })
                 }
