@@ -2,7 +2,7 @@
 // @id iitc-oldestportal-@vincenzotilotta
 // @name IITC plugin: oldestportalV2
 // @category Info
-// @version 0.0.3.20140301.00014
+// @version 0.0.3.20140304.00015
 // @namespace https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -15,7 +15,7 @@
 // @author tailot@9w9.org shine@angelic.it
 // ==/UserScript==
 function wrapper() {
-    if (typeof window.plugin !== "function") window.plugin = function () {};
+    if (typeof window.plugin !== 'function') window.plugin = function () {};
     window.plugin.oldestportal = function () {};
     window.plugin.oldestportal.html5_storage_support = function () {
         try {
@@ -106,8 +106,8 @@ function wrapper() {
                 if (n[(tc*11)+1]=="" || n[(tc*11)+1]==0)
                     dater = 'unknown';                           
                 
-                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a href="http://www.ingress.com/intel?ll=' + r.toFixed(6) + "," + i.toFixed(6) + '">' + n[(tc*11)+5] + "</span></a>"+
-                    '</td><td '+first+'>' + dater + ' </td>'+
+                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);">' + n[(tc*11)+5] + "</span></a>"+
+				    '</td><td '+first+'>' + dater + ' </td>'+
                     '<td '+first+'>'+s+'</td>'+
                     '<td '+first+'>'+'<mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[(tc*11)+9]) + '">'+n[(tc*11)+8]+'</mark></td>'+
                     '<td '+first+'>'+n[(tc*11)+10]+'</td></tr>';
@@ -200,7 +200,21 @@ function wrapper() {
         if (window.bootPlugins) window.bootPlugins.push(e);
         else window.bootPlugins = [e]
     }
-}
-var script = document.createElement("script");
-script.appendChild(document.createTextNode("(" + wrapper + ")();"));
-(document.body || document.head || document.documentElement).appendChild(script)
+//}
+
+// PLUGIN END //////////////////////////////////////////////////////////
+
+	setup.info = plugin_info; //add the script info data to the function as a property
+	if(!window.bootPlugins) window.bootPlugins = [];
+	window.bootPlugins.push(setup);
+	// if IITC has already booted, immediately run the 'setup' function
+	if(window.iitcLoaded && typeof setup === 'function') 
+		setup();
+} // wrapper end
+// inject code into site context
+var script = document.createElement('script');
+var info = {};
+if (typeof GM_info !== 'undefined' && GM_info && GM_info.script) 
+	info.script = { version: GM_info.script.version, name: GM_info.script.name, description: GM_info.script.description };
+script.appendChild(document.createTextNode('('+ wrapper +')('+JSON.stringify(info)+');'));
+(document.body || document.head || document.documentElement).appendChild(script);
