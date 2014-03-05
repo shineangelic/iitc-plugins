@@ -144,7 +144,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 if (n[(tc*11)+1]=="" || n[(tc*11)+1]==0)
                     dater = 'unknown';                           
                 
-                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);">' + n[(tc*11)+5] + "</span></a>"
+                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);return false();">' + n[(tc*11)+5] + "</span></a>"
                     +'</td><td '+first+'>' + dater + ' </td>'
                     +'<td '+first+'>'+s+'</td>'
                     +'<td '+first+'>'+'<mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[(tc*11)+9]) + '">'+n[(tc*11)+8]+'</mark></td>'
@@ -154,7 +154,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             }
             u += '</tbody></table>';
 
-            var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo()" title="Oldest Portal Info">How does it Work?</a></aside></div>';
+            var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo();return false();" title="Oldest Portal Info">How does it Work?</a></aside></div>';
             dialog({
                 html: u + '<br /><br />' + f,
                 title: 'Oldest Portal Plugin V2',
@@ -181,7 +181,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             lev: window.PLAYER.level
         });
 
-        var e = '<input style="font-size:80%" id="playerOldPortal" placeholder="Type player name to find oldest portal" type="text">';
+        var e = '<input id="playerOldPortal" placeholder="Type player name to find oldest portal" type="text">';
         $('#sidebar').append(e);
         $("#playerOldPortal").keypress(function (e) {
             if ((e.keyCode ? e.keyCode : e.which) !== 13) return;
