@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportalV2
 // @category       Info
-// @version        0.0.3.20140305.00019
+// @version        0.0.3.20140305.00020
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -12,7 +12,7 @@
 // @match          https://www.ingress.com/intel*
 // @match          http://www.ingress.com/intel*
 // @grant          none
-// @author         tailot@9w9.org shine@angelic.it
+// @author         tailot@9w9.org shine@angelic.it Zaso
 // ==/UserScript==
 
 function wrapper(plugin_info) {
@@ -50,7 +50,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 +' More the faction clicks, more the correct enemy guardian identified.'
                 +'<br/><br/><b>Last Recon</b> indicates last visit/confirmation to the portal.'
                 +'<br/><br/> <b>Oldest portal plugin</b> is a free espionage tool, but it\'s likely to be considered against the Ingress TOS. Any use is at your own risk. Please use it wisely and share it only with <i>trusted</i> agents.',
-            title: 'Oldest Portal Plugin V2 - tailot@9w9.org & shine@angelic.it',
+            title: 'Oldest Portal Plugin V2 - Tailot, Shine, Zaso
             id: 'oldestportalinfo'
         });
         return;
@@ -97,7 +97,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
         }, function (t) {
             if (t == '') {
                 dialog({
-                    html: 'No player found with nickname: ' + e + '. Is this espionage?',
+                    html: 'No agent found with nickname: ' + e + '. Is this espionage?',
                     title: 'Oldest Portal Plugin V2 - NOT FOUND',
                     id: 'oldestportal'
                 });
