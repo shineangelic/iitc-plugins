@@ -1,21 +1,26 @@
 // ==UserScript==
-// @id iitc-oldestportal-@vincenzotilotta
-// @name IITC plugin: oldestportalV2
-// @category Info
-// @version 0.0.3.20140305.00018
-// @namespace https://github.com/jonatkins/ingress-intel-total-conversion
-// @updateURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
-// @downloadURL https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
-// @description Show the oldest portals of a chosen player
-// @include https://www.ingress.com/intel*
-// @include http://www.ingress.com/intel*
-// @match https://www.ingress.com/intel*
-// @match http://www.ingress.com/intel*
-// @grant none
-// @author tailot@9w9.org shine@angelic.it
+// @id             iitc-oldestportal-@vincenzotilotta
+// @name           IITC plugin: oldestportalV2
+// @category       Info
+// @version        0.0.3.20140305.00019
+// @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
+// @updateURL      https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
+// @downloadURL    https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
+// @description    Show the oldest portals of a chosen player
+// @include        https://www.ingress.com/intel*
+// @include        http://www.ingress.com/intel*
+// @match          https://www.ingress.com/intel*
+// @match          http://www.ingress.com/intel*
+// @grant          none
+// @author         tailot@9w9.org shine@angelic.it
 // ==/UserScript==
+
 function wrapper(plugin_info) {
-    if (typeof window.plugin !== 'function') window.plugin = function () {};
+// ensure plugin framework is there, even if iitc is not yet loaded
+if(typeof window.plugin !== 'function') window.plugin = function() {};
+
+// PLUGIN START ////////////////////////////////////////////////////////
+
     window.plugin.oldestportal = function () {};
 
     window.plugin.oldestportal.getFactionColor = function (faction) {
@@ -124,7 +129,7 @@ function wrapper(plugin_info) {
                 image = '<td rowspan="5"><img src="http://www.angelic.it/ingressv2/guardian'+grade+'.png" alt="guardian"></td>';
             }       
 
-            var u = 'Known Portals pwned by <mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[2]) + '">' + n[0] +'</mark>: '+numrows+'<br/><br/>';
+            var u = 'Known Portals owned by <mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[2]) + '">' + n[0] +'</mark>: '+numrows+'<br/><br/>';
             u += '<table><tbody><th></th><th>Portal</th><th>Life</th><th>Valid</th><th>Reported By</th><th>Last recon</th>';
 
             for (var tc = 0; tc < numrows; tc++) {
