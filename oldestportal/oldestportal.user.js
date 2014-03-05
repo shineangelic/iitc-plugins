@@ -17,13 +17,13 @@
 function wrapper(plugin_info) {
     if (typeof window.plugin !== 'function') window.plugin = function () {};
     window.plugin.oldestportal = function () {};
-    window.plugin.oldestportal.html5_storage_support = function () {
+    /*window.plugin.oldestportal.html5_storage_support = function () {
         try {
             return "localStorage" in window && window["localStorage"] !== null
         } catch (e) {
             return false
         }
-    };
+    };*/
     window.plugin.oldestportal.getFactionColor = function (faction) {
     	var o = window.COLORS[2];
 		if(faction == 'R'){ o = window.COLORS[1]; }
@@ -146,7 +146,7 @@ function wrapper(plugin_info) {
             ap: window.PLAYER.ap,
             lev: window.PLAYER.level
         });
-        if (window.plugin.oldestportal.html5_storage_support() != false) {
+       // if (window.plugin.oldestportal.html5_storage_support() != false) {
             $(document).ajaxSuccess(function (e, t, n) {
                 if (t.action == "getPortalDetails") {
                     var r;
@@ -184,7 +184,7 @@ function wrapper(plugin_info) {
                 var t = $(this).val();
                 window.plugin.oldestportal.DrawOldestPortalByPlayer(t)
             })
-        }
+        //}
     };
 
 // PLUGIN END //////////////////////////////////////////////////////////
