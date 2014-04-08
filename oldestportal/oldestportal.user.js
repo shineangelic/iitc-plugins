@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportalV2
 // @category       Info
-// @version        0.0.3.20140305.00021
+// @version        0.0.3.20140305.00022
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -12,7 +12,7 @@
 // @match          https://www.ingress.com/intel*
 // @match          http://www.ingress.com/intel*
 // @grant          none
-// @author         tailot@9w9.org shine@angelic.it Zaso
+// @author         tailot shine@angelic.it Zaso
 // ==/UserScript==
 
 function wrapper(plugin_info) {
@@ -129,7 +129,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 image = '<td rowspan="5"><img src="http://www.angelic.it/ingressv2/guardian'+grade+'.png" alt="guardian"></td>';
             }       
 
-            var u = 'Known Portals owned by <mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[2]) + '">' + n[0] +'</mark>: '+numrows+'<br/><br/>';
+            var u = 'Known Portals pwned by <mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[2]) + '">' + n[0] +'</mark>: '+numrows+'<br/><br/>';
+            
             u += '<table><tbody><th></th><th>Portal</th><th>Life</th><th>Valid</th><th>Reported By</th><th>Last recon</th>';
 
             for (var tc = 0; tc < numrows; tc++) {
@@ -153,6 +154,9 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 image='';
             }
             u += '</tbody></table>';
+            var t1 = n[3] * 1e-6;
+            var t2 = n[4] * 1e-6;
+            u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.<br/> Please click on portal to confirm its owner. Be safe.';
 
             var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo();return false();" title="Oldest Portal Info">How does it Work?</a></aside></div>';
             dialog({
