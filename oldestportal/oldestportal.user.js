@@ -105,7 +105,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             }
             var n = t.split('{}');
             var arrayLength = n.length-1;
-            var numrows = arrayLength/11;
+            var numrows = arrayLength/12;
           
             var a = n[10];
             
@@ -137,19 +137,19 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 if (tc > 4) {
                     break;
                 }
-                var r = n[(tc*11)+3] * 1e-6;
-                var i = n[(tc*11)+4] * 1e-6;
+                var r = n[(tc*12)+3] * 1e-6;
+                var i = n[(tc*12)+4] * 1e-6;
                 var s = 'NO';
                 if (n[(tc*11)+6]) s = 'YES';
-                var dater = window.plugin.oldestportal.timeToDays(n[(tc*11)+1])+' days';
-                if (n[(tc*11)+1]=="" || n[(tc*11)+1]==0)
+                var dater = window.plugin.oldestportal.timeToDays(n[(tc*12)+1])+' days';
+                if (n[(tc*12)+1]=="" || n[(tc*12)+1]==0)
                     dater = 'unknown';                           
                 
                 u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);return false();">' + n[(tc*11)+5] + "</span></a>"
                     +'</td><td '+first+'>' + dater + ' </td>'
                     +'<td '+first+'>'+s+'</td>'
                     +'<td '+first+'>'+'<mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[(tc*11)+9]) + '">'+n[(tc*11)+8]+'</mark></td>'
-                    +'<td '+first+'>'+n[(tc*11)+10]+'</td></tr>';
+                    +'<td '+first+'>'+n[(tc*12)+10]+'</td></tr>';
                 first='';
                 image='';
             }
@@ -158,6 +158,9 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             var t2 = n[4] * 1e-6;
             u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.<br/> Please click on portal to confirm its owner. Be safe.';
 
+            var guid = n[12];
+            u+= '<br/>GUID:'+guid; 
+            
             var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo();return false();" title="Oldest Portal Info">How does it Work?</a></aside></div>';
             dialog({
                 html: u + '<br /><br />' + f,
