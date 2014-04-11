@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportalV2
 // @category       Info
-// @version        0.0.3.20140411.00024
+// @version        0.0.3.20140411.00025
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -130,7 +130,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             }       
 
             var u = 'Known Portals pwned by <mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[2]) + '">' + n[0] +'</mark>: '+numrows+'<br/><br/>';
-            
+
             u += '<table><tbody><th></th><th>Portal</th><th>Life</th><th>Valid</th><th>Reported By</th><th>Last recon</th>';
 
             for (var tc = 0; tc < numrows; tc++) {
@@ -140,12 +140,19 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 var r = n[(tc*12)+3] * 1e-6;
                 var i = n[(tc*12)+4] * 1e-6;
                 var s = 'NO';
+                var guid = n[(tc*12)+11];
+
                 if (n[(tc*12)+6]) s = 'YES';
                 var dater = window.plugin.oldestportal.timeToDays(n[(tc*12)+1])+' days';
                 if (n[(tc*12)+1]=="" || n[(tc*12)+1]==0)
                     dater = 'unknown';                           
-                
-                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);return false();">' + n[(tc*12)+5] + "</span></a>"
+
+                var clickOnNamePortal = 'window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);';
+                if(guid) {
+                  clickOnNamePortal = 'window.zoomToAndShowPortal(\''+guid+'\', ['+r.toFixed(6)+','+i.toFixed(6)+']);';
+                }
+
+                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="'+clickOnNamePortal+'return false;">' + n[(tc*12)+5] + "</span></a>"
                     +'</td><td '+first+'>' + dater + ' </td>'
                     +'<td '+first+'>'+s+'</td>'
                     +'<td '+first+'>'+'<mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[(tc*12)+9]) + '">'+n[(tc*12)+8]+'</mark></td>'
@@ -156,15 +163,10 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             u += '</tbody></table>';
             var t1 = n[3] * 1e-6;
             var t2 = n[4] * 1e-6;
-            var guid = n[11];
+
             u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.';
-            
-             u+= '<br/>GUID: '+guid; 
             u+= '<br/><br/> Please click on portal address to confirm its owner. Be safe.';
 
-            
-           
-            
             var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo();return false();" title="Oldest Portal Info">How does it Work?</a></aside></div>';
             dialog({
                 html: u + '<br /><br />' + f,
