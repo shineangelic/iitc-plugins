@@ -140,15 +140,15 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
                 var r = n[(tc*12)+3] * 1e-6;
                 var i = n[(tc*12)+4] * 1e-6;
                 var s = 'NO';
-                if (n[(tc*11)+6]) s = 'YES';
+                if (n[(tc*12)+6]) s = 'YES';
                 var dater = window.plugin.oldestportal.timeToDays(n[(tc*12)+1])+' days';
                 if (n[(tc*12)+1]=="" || n[(tc*12)+1]==0)
                     dater = 'unknown';                           
                 
-                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);return false();">' + n[(tc*11)+5] + "</span></a>"
+                u+='<tr style="background-color: #1b415e !important;">'+image+'<td '+first+'><a onclick="window.map.setView(['+r.toFixed(6)+','+i.toFixed(6)+']);return false();">' + n[(tc*12)+5] + "</span></a>"
                     +'</td><td '+first+'>' + dater + ' </td>'
                     +'<td '+first+'>'+s+'</td>'
-                    +'<td '+first+'>'+'<mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[(tc*11)+9]) + '">'+n[(tc*11)+8]+'</mark></td>'
+                    +'<td '+first+'>'+'<mark class="nickname" style="color:' + window.plugin.oldestportal.getFactionColor(n[(tc*12)+9]) + '">'+n[(tc*12)+8]+'</mark></td>'
                     +'<td '+first+'>'+n[(tc*12)+10]+'</td></tr>';
                 first='';
                 image='';
