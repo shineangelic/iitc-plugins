@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportalV2
 // @category       Info
-// @version        0.0.3.20140411.00023
+// @version        0.0.3.20140411.00024
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -156,10 +156,14 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             u += '</tbody></table>';
             var t1 = n[3] * 1e-6;
             var t2 = n[4] * 1e-6;
-            u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.<br/> Please click on portal to confirm its owner. Be safe.';
+            var guid = n[11];
+            u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.';
+            
+             u+= '<br/>GUID: '+guid; 
+            u+= '<br/><br/> Please click on portal address to confirm its owner. Be safe.';
 
-            var guid = n[12];
-            u+= '<br/>GUID:'+guid; 
+            
+           
             
             var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo();return false();" title="Oldest Portal Info">How does it Work?</a></aside></div>';
             dialog({
