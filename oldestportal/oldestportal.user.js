@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportalV2
 // @category       Info
-// @version        0.0.3.20140506.00026
+// @version        0.0.3.20140522.00027
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -75,7 +75,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             nickname: r,
             guid: data.guid,
             capturetime: i,
-            faction: p.controllingTeam.team,
+            faction: p.team,
             lat: p.locationE6.latE6,
             lon: p.locationE6.lngE6,
             title: p.descriptiveText.map.TITLE,
