@@ -2,7 +2,7 @@
 // @id             iitc-oldestportal-@vincenzotilotta
 // @name           IITC plugin: oldestportalV2
 // @category       Info
-// @version        0.0.3.20140522.00027
+// @version        0.0.3.20140529.162500
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @updateURL      https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
 // @downloadURL    https://github.com/shineangelic/iitc-plugins/raw/master/oldestportal/oldestportal.user.js
@@ -32,7 +32,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
     window.plugin.oldestportal.ResoCheck = function (e, t) {
         try {
             for (var n = 0; n < t.length; n++) {
-                if (t[n].ownerGuid.toLowerCase() == e) {
+                if (t[n].owner.toLowerCase() == e) {
                     return 1;
                 }
             }
@@ -61,26 +61,28 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
         var r;
         var i;
-        if (!p.captured) {
+        if (!p.capturedTime) {
             r = '';
             i = 0
         } else {
-            r = p.captured.capturingPlayerId;
-            i = p.captured.capturedTime
+            // r = p.captured.capturingPlayerId; // DATA NO MORE AVAILABLE
+            r = p.owner;
+            i = p.capturedTime
         }
-        var s = p.descriptiveText.map.ADDRESS;
-        var o = window.plugin.oldestportal.ResoCheck(r.toLowerCase(), p.resonatorArray.resonators);
+
+        // var s = p.descriptiveText.map.ADDRESS; // DATA NO MORE AVAILABLE
+        var o = window.plugin.oldestportal.ResoCheck(r.toLowerCase(), p.resonators);
 
         $.post('http://www.angelic.it/ingressv2/ingressv2.php',{
             nickname: r,
             guid: data.guid,
             capturetime: i,
             faction: p.team,
-            lat: p.locationE6.latE6,
-            lon: p.locationE6.lngE6,
-            title: p.descriptiveText.map.TITLE,
+            lat: p.latE6,
+            lon: p.lngE6,
+            title: p.title,
             valid: o,
-            address: s,
+            address: '', // DATA NO MORE AVAILABLE
             nickReporter: window.PLAYER.nickname
         });
     }
@@ -166,7 +168,7 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             var t1 = n[3] * 1e-6;
             var t2 = n[4] * 1e-6;
 
-            u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.';
+            // DATA NO MORE AVAILABLE // u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.';
             u+= '<br/><br/> Please click on first portal\'s name to confirm its owner. Be safe.';
 
             var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo();return false();" title="Oldest Portal Info">How does it Work?</a></aside></div>';
