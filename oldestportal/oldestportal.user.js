@@ -168,7 +168,8 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
             var t1 = n[3] * 1e-6;
             var t2 = n[4] * 1e-6;
 
-            // DATA NO MORE AVAILABLE // u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.';
+            
+            u+= '<br/>Oldest portal address is: <a onclick="window.map.setView(['+t1.toFixed(6)+','+t2.toFixed(6)+']);return false();">' + n[7] + '</a>.';
             u+= '<br/><br/> Please click on first portal\'s name to confirm its owner. Be safe.';
 
             var f = '<br/><div class="linkdetails"><aside><a onclick="window.plugin.oldestportal.showInfo();return false();" title="Oldest Portal Info">How does it Work?</a></aside></div>';
